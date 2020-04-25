@@ -1,3 +1,5 @@
-from django.shortcuts import render
+import json
+from django.http import HttpResponse
 
-# Create your views here.
+def show_analysis(request):
+    return HttpResponse()
