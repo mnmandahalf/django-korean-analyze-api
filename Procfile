@@ -1,1 +1,1 @@
-web: gunicorn analysisapi.wsgi --log-file -
+web: bash run.sh
