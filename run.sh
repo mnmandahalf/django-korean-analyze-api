@@ -1,3 +1,2 @@
-mv requirements.txt.bk requirements.txt 
-python3 -m pip install -r requirements.txt
+python3 -m pip install mecab-python3
 gunicorn analysisapi.wsgi --log-file -
