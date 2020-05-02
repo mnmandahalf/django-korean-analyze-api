@@ -13,9 +13,8 @@ def analyze(text):
     res = {
       "text": text,
       "translation": translate(text),
-      "tokens_translation": translate_tokens(poslist),
       "romanized": romanize(text),
-      "tokens": list(map(new_pos, poslist)),
+      "tokens": make_tokens(list(map(new_pos, poslist)), translate_tokens(poslist)),
     }
     return res
 
@@ -44,3 +43,18 @@ def translate(text):
 def romanize(text):
     transliter = Transliter(academic)
     return transliter.translit(text)
+
+def make_tokens(token_list, trans_text):
+    trans_lint = trans_text.replace(",", "、").split("、")
+    new_list = []
+    for token, trans in zip(token_list, trans_lint):
+        new_list.append(
+          {
+            "token": token[0],
+            "stem": "",
+            "romanized": romanize(token[0]),
+            "translation": trans,
+            "word_class": token[1]
+          }
+        )
+    return new_list
