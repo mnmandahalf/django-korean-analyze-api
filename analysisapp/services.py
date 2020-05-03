@@ -44,6 +44,10 @@ def romanize(text):
     transliter = Transliter(academic)
     return transliter.translit(text)
 
+def make_stem(token):
+    if (token[1] in ["動詞", "形容詞"]):
+        return token[0] + "다"
+
 def make_tokens(token_list, trans_text):
     trans_lint = trans_text.replace(",", "、").split("、")
     new_list = []
@@ -51,7 +55,7 @@ def make_tokens(token_list, trans_text):
         new_list.append(
           {
             "token": token[0],
-            "stem": "",
+            "stem": make_stem(token),
             "romanized": romanize(token[0]),
             "translation": trans,
             "word_class": token[1]
