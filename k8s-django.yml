@@ -1,0 +1,49 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: django
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django
+  template:
+    metadata:
+      labels:
+        app: django
+    spec:
+      containers:
+        - name: django
+          image: gcr.io/yukkuri-274014/django-konlpy-api
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8000
+              scheme: HTTP
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+          ports:
+            - containerPort: 8000
+              name: django
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: django-svc
+spec:
+  selector:
+    app: django
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      name: django
+  type: NodePort
