@@ -25,7 +25,7 @@ SECRET_KEY = 'c-qk+4r2l55gvhd#r%e2t@kcg66i1r8cxj)ww0#i=742k@=y_*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['yukkuri-konlpy-api.com']
 
 
 # Application definition
