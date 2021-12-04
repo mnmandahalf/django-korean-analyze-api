@@ -5,7 +5,7 @@ from hangul_romanize import Transliter
 from hangul_romanize.rule import academic
 import urllib.request
 
-GAS_URL = "https://script.google.com/macros/s/AKfycbyZOEOeTmftFoh4vO1hmLO7JNkiWOKOMarrACMS4YLz8Dnk2o0/exec"
+GAS_URL = "https://script.google.com/macros/s/AKfycbxcmYsrbp-k8_sCsw6wKh2fTWXUQczj7X0VtmejmlGDykZCjS1lo_xTpY-gw2o-3vU/exec"
 
 def analyze(text):
     mecab = Mecab()
@@ -19,8 +19,12 @@ def analyze(text):
     return res
 
 def new_pos(pos):
-    new_tag = tag_dict[pos[1]]
-    return (pos[0], new_tag)
+    poslist = pos[1].split("+")
+    new_tag_list =list(map(new_tag, poslist))
+    return (pos[0], "+".join(new_tag_list))
+
+def new_tag(pos):
+    return tag_dict[pos]
 
 def token_list(pos):
     return pos[0]
