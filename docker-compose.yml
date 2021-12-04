@@ -1,0 +1,11 @@
+version: "3"
+services:
+  app:
+    build: .
+    command: gunicorn analysisapi.wsgi -b 0.0.0.0:8000 --log-file -
+    volumes:
+      - .:/app
+    ports:
+      - 8081:8000
+    tty: true
+    stdin_open: true
