@@ -49,3 +49,12 @@ tag_dict = {
     "ETM": "連体形語尾",
     "ETN": "名詞形전성語尾（他の品詞に役割が変わる語尾）",
 }
+
+trans_target = [
+    "MAG",
+    "VV",
+    "NNP",
+    "NNG",
+    "NP",
+    "VA"
+]

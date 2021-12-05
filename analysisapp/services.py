@@ -1,6 +1,7 @@
 from konlpy.tag import Mecab
+from konlpy.tag import Okt
 from konlpy.utils import pprint
-from analysisapp.tags import tag_dict
+from analysisapp.tags import tag_dict, trans_target
 from hangul_romanize import Transliter
 from hangul_romanize.rule import academic
 import urllib.request
@@ -8,14 +9,15 @@ import itertools
 
 GAS_URL = "https://script.google.com/macros/s/AKfycbxcmYsrbp-k8_sCsw6wKh2fTWXUQczj7X0VtmejmlGDykZCjS1lo_xTpY-gw2o-3vU/exec"
 
-def analyze(text):
-    mecab = Mecab()
-    poslist = mecab.pos(text)
+def analyze(raw_text):
+    text = raw_text.replace(",", "")
+    mecab_poslist = Mecab().pos(text)
+    print(mecab_poslist)
     res = {
-      "text": text,
-      "translation": translate(text),
+      "text": raw_text,
+      "translation": translate(raw_text),
       "romanized": romanize(text),
-      "tokens": make_tokens(list(map(new_pos, poslist)), translate_tokens(poslist), poslist),
+      "tokens": make_tokens(list(map(new_pos, mecab_poslist)), mecab_poslist),
     }
     return res
 
@@ -30,11 +32,14 @@ def new_tag(pos):
 def token_list(pos):
     return pos[0]
 
-def translate_tokens(poslist):
-  tokens = list(map(token_list, poslist))
-  text = ",".join(tokens)
-  print(text)
-  return translate(text)
+def translate_tokens(pos):
+    substitute = substitute_trans(pos) 
+    if(substitute):
+        return substitute
+    if(pos[1] in trans_target):
+        stem = make_stem(pos)
+        text = stem if stem else pos[0]
+        return translate(text)
 
 def translate(text):
     params = {
@@ -51,28 +56,39 @@ def romanize(text):
     transliter = Transliter(academic)
     return transliter.translit(text)
 
-def make_stem(token):
-    if (token[1] in ["動詞", "形容詞"]):
-        return token[0] + "다"
+def make_stem(pos):
+    if (pos and pos[1] in ["VV", "VA", "XSA"]):
+        oktpos = Okt().pos(pos[0], norm=False, stem=True)
+        return oktpos[0][0]
 
-def make_tokens(token_list, trans_text, poslist):
-    trans_list = trans_text.replace(",", "、").split("、")
-    # print(trans_text)
-    # print(trans_list)
+def make_tokens(token_list, mecab_poslist):
     new_list = []
-    for token, trans, pos in itertools.zip_longest(token_list, trans_list, poslist):
+    for token, pos in itertools.zip_longest(token_list, mecab_poslist):
         new_list.append(
           {
             "token": token[0],
-            "stem": make_stem(token),
+            "stem": make_stem(pos),
             "romanized": romanize(token[0]),
-            "translation": substitute_trans(trans, pos),
+            "translation": translate_tokens(pos),
             "word_class": token[1]
           }
         )
     return new_list
 
-def substitute_trans(trans, pos):
+def make_syntaxes(text):
+    tanslation = translate(text.replace(" ", ","))
+    new_list = []
+    for word, trans in itertools.zip_longest(text.split(" "), tanslation.replace(",", "、").split("、")):
+        new_list.append(
+            {
+                "word": word,
+                "translation": trans
+            }
+        )
+    print(new_list)
+    return text
+
+def substitute_trans(pos):
     # print(pos)
     if pos[1] == "J":
       if pos[0] == "도":
@@ -83,6 +99,8 @@ def substitute_trans(trans, pos):
         return "が"
     if pos[1] == "JKO":
         return "を、に"
+    if pos[1] == "JKG":
+        return "の"
     if pos[1] == "XSN":
         if pos[0] == "들":
             return "たち"
@@ -97,4 +115,3 @@ def substitute_trans(trans, pos):
         return "〜な、〜である"
     if pos[0] == "못해":
         return "〜できない"
-    return trans
