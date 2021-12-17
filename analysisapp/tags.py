@@ -57,4 +57,16 @@ trans_target = [
     "NNG",
     "NP",
     "VA"
+    "MAJ",
+    "MM",
+    "NNB",
+    "NNBC",
+    "NR",
+]
+
+stem_target = [
+    "VV",
+    "VA",
+    "XSA",
+    "NP"
 ]
