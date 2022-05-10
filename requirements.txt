@@ -10,7 +10,6 @@ django-filter==2.4.0
 gunicorn==20.0.4
 hangul-romanize==0.1.0
 idna==2.9
-JPype1==0.7.3
 lxml==4.6.5
 mecab-python3==0.996.5
 numpy==1.21.0
