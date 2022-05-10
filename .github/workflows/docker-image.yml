@@ -23,7 +23,9 @@ jobs:
       with:
         workload_identity_provider: 'projects/17179239549/locations/global/workloadIdentityPools/gh-oidc-pool/providers/gh-oidc-pool'
         service_account: 'yukkuri-gha@yukkuri-274014.iam.gserviceaccount.com'
-    - name: 'Set up Cloud SDK'
+    - name: Set up Cloud SDK
       uses: 'google-github-actions/setup-gcloud@v0'
+    - name: gcloud auth
+      run: gcloud auth configure-docker
     - name: Push the Docker image to GCR
-      run: gcloud docker -- push gcr.io/yukkuri-274014/django-konlpy-api:latest
+      run: docker push gcr.io/yukkuri-274014/django-konlpy-api:latest
