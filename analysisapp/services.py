@@ -1,6 +1,3 @@
-from konlpy.tag import Mecab, Okt
-from konlpy.tag import Okt
-from konlpy.utils import pprint
 from analysisapp.tags import tag_dict, trans_target, stem_target
 from hangul_romanize import Transliter
 from hangul_romanize.rule import academic
@@ -14,7 +11,6 @@ def analyze(raw_text):
     text = raw_text.replace(",", "")
     mecab_ = mecab.MeCab()
     mecab_poslist = mecab_.parse(text)
-    print(mecab_poslist)
     res = {
       "text": raw_text,
       "translation": translate(raw_text),
@@ -65,7 +61,6 @@ def translate(text):
     }
     req = urllib.request.Request('{}?{}'.format(GAS_URL, urllib.parse.urlencode(params)))
     res = urllib.request.urlopen(req).read()
-    print(res.decode("UTF-8"))
     return res.decode("UTF-8")
 
 def romanize(text):

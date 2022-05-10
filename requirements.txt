@@ -11,7 +11,6 @@ gunicorn==20.0.4
 hangul-romanize==0.1.0
 idna==2.9
 JPype1==0.7.3
-konlpy==0.5.2
 lxml==4.5.0
 mecab-python3==0.996.5
 numpy==1.18.3
