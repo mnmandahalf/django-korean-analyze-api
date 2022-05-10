@@ -11,8 +11,21 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    permissions:
+      id-token: 'write'
 
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile --tag gcr.io/yukkuri-274014/django-konlpy-api:latest
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v0'
+      with:
+        workload_identity_provider: 'projects/17179239549/locations/global/workloadIdentityPools/gh-oidc-pool/providers/gh-oidc-pool'
+        service_account: 'yukkuri-gha@yukkuri-274014.iam.gserviceaccount.com'
+    - name: Set up Cloud SDK
+      uses: 'google-github-actions/setup-gcloud@v0'
+    - name: gcloud auth
+      run: gcloud auth configure-docker
+    - name: Push the Docker image to GCR
+      run: docker push gcr.io/yukkuri-274014/django-konlpy-api:latest
