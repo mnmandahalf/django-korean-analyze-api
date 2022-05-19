@@ -124,5 +124,6 @@ STATIC_URL = '/static/'
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
-    'https://yukkuri-127.com'
+    'https://yukkuri-127.com',
+    'https://goguma.jp'
 ]
