@@ -122,8 +122,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    'https://yukkuri-127.com',
-    'https://goguma.jp'
-]
+CORS_ORIGIN_ALLOW_ALL = True
