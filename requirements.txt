@@ -12,7 +12,7 @@ hangul-romanize==0.1.0
 idna==2.9
 lxml==4.6.5
 mecab-python3==0.996.5
-numpy==1.21.0
+numpy==1.22.0
 oauthlib==3.1.0
 psycopg2==2.8.5
 pybind11==2.5.0
